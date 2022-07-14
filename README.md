@@ -46,5 +46,5 @@ WHERE RunningTotal >= 10000000 -- Outer Query Predicate - Requires SAME Dataset 
 - Supported on all SQL Server versions.
 - Remember, <u>data</u> within the record pertains to the <u>First or Last Record</u>.
 - Additional predicates (filters) can be included. However, those predicates must be placed on both the inner and outer `WHERE` clause inorder to maintain the ***same dataset*** and retrieve the **<u>correct</u>** first or last record.
-- `NOT EXISTS()` is allowed in `ON` statements for `JOIN`s.
 - `JOIN`s are allowed but can increase dataset complexity. Although, they'll help you figure out the limitations and possibilities here.
+- `NOT EXISTS()` is allowed in `ON` statements for `JOIN`s. For example, joining the first or last record only to another dataset.
