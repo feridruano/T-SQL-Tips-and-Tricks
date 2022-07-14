@@ -43,11 +43,11 @@ WHERE RunningTotal >= 10000000 -- Outer Query Predicate - Requires SAME Dataset 
 
 - Supported on all SQL Server versions.
 - Remember, <u>data</u> within the record pertains to the <u>First or Last Record</u>.
-- Additional predicates (filters) can be included. However, those predicates must be placed on both the inner and outer `WHERE` clause inorder to maintain the ***same dataset*** and retrieve the **<u>correct</u>** first or last record.
-- `JOIN`s are allowed but can increase dataset complexity. Although, they'll help you figure out the limitations and possibilities here.
-- `NOT EXISTS()` is allowed in `ON` statements for `JOIN`s. For example, joining the first or last record only to another dataset.
+- Additional predicates (filters) can be included. However, those predicates must be placed on both the inner and outer `WHERE` clause inorder to maintain the **<u>same dataset</u>** and retrieve the **<u>correct</u>** first or last record.
+- `JOIN`s are allowed but can increase dataset complexity. Although, practicing with `JOIN`s is useful in understanding the limitations and possibilities of `NOT EXISTS()`.
+- `NOT EXISTS()` is allowed in `ON` statements for `JOIN`s. For example, joining the first or last record of one dataset to another dataset.
 
-
+</br>
 
 ## Get Maximum or Minimum Value for 3+ Columns
 
@@ -88,28 +88,27 @@ The examples above both transpose multiple rows into a singular column to be agg
 - Most issues will be results of missing or extra parenthesis, specifically when writting out the `VALUES()`.
 - Subquery starting structure necessary: `FROM (VALUES ...) A(COLUMN_NAME)`
 
-
-
-
+</br>
 
 ## SQL Server Version Differences
 
 ### SQL Server 2022
 
 - `Greatest()` and `Least()`
-- `STIRNG_SPLIT()` - Improved with **Ordinal** determinism
+- `STIRNG_SPLIT()` - **Ordinal** is now deterministic.
 - `GENERATE_SERIES()` - Create a table with a series (1-nth number).
+- `IGNORE NULLS` - `FIRST_VALUE()`, `LAST_VALUE()`, `LAG()`, and `LEAD()`.
+- `WINDOW` Clause - Simplify multiple of the same `OVER()` window function.
 - Parameter Sniffing - Improved, now caches multiple plans and switches between them.
-- Ignore Nulls - `FIRST_VALUE()`, `LAST_VALUE()`, `LAG()`, and `LEAD()`.
 
 ### SQL Server 2019
 
 ### Features
 
-- Scalar UDF Inlining - 
+- Scalar UDF Inlining
 - `APPROX_COUNT_DISTINCT()`
-- TempDB - Improved using memory-optimization
-- Verbose Truncation Warning - Big int to smaller int
+- TempDB - Improved using memory-optimization.
+- Verbose Truncation Warning - Big int to smaller int warning.
 
 ### SQL Server 2017
 
@@ -119,8 +118,8 @@ The examples above both transpose multiple rows into a singular column to be agg
 - `TRANSLATE()` - Replace character by character regardless of order in string
 - `TRIM()` - Remove left and right whitespace
 - `STRING_ARG()` - Concatenate column strings together
-- Database Tuning - Improve over all performance
 - `SELECT INTO` - Now allows non-default file groups
+- Database Tuning - Improve over all performance
 
 ### SQL Server 2016
 
@@ -128,13 +127,15 @@ The examples above both transpose multiple rows into a singular column to be agg
 
 - Live Query Statistics - See execution plan before the query finishes! No more waiting for long query plans.
 - Dynamic Data Masking - Mask data for specific users.
-- `DROP IF EXISTS` - As it's spoken
-- `FORMATMESSAGE()` - Supply custom strings, part of dynamic SQL
-- `DATEDIFF_BIG()` - More precise date part
-- `String_Split()`
-- `AT TIME ZONE` - Converts between timezones
+- `DROP IF EXISTS`
+- `FORMATMESSAGE()` - Supply custom strings, part of dynamic SQL.
+- `DATEDIFF_BIG()` - More precise date part.
+- `STRING_SPLIT()` - Split strings by separator. Non-deterministic ordinal.
+- `AT TIME ZONE` - Converts between timezones.
 - `CURRENT_TRANSACTION_ID()` - Returns the current transaction ID.
-- JSON support
+- JSON Support
+
+</br>
 
 ## Look Into This
 
