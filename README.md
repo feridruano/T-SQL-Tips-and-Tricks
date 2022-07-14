@@ -11,9 +11,9 @@ A repository of useful T-SQL Tips and Tricks. Includes basic generalized queries
 SELECT *
 FROM dbo.Orders
 WHERE NOT EXISTS(SELECT *
-				 FROM dbo.Orders T
-				 WHERE T.SalesPerson = Orders.SalesPerson
-				   AND T.OrderDate < Orders.OrderDate) -- First Record For Each Sales Person
+                 FROM dbo.Orders T
+                 WHERE T.SalesPerson = Orders.SalesPerson
+                   AND T.OrderDate < Orders.OrderDate) -- First Record For Each Sales Person
 ```
 
 #### Example 2: For each year, find the order # that cumulatively reached over $10 million revenue. 
