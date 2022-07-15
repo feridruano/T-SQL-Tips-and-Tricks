@@ -44,7 +44,7 @@ WHERE RunningTotal >= 10000000 -- Outer Query Predicate - Requires SAME Dataset 
 - Supported on all SQL Server versions.
 - Remember, <u>data</u> within the record pertains to the <u>First or Last Record</u>.
 - Additional predicates (filters) can be included. However, those predicates must be placed on both the inner and outer `WHERE` clause inorder to maintain the **<u>same dataset</u>** and retrieve the **<u>correct</u>** first or last record.
-- `JOIN`s are allowed but can increase dataset complexity. Although, practicing with `JOIN`s is useful in understanding the limitations and possibilities of `NOT EXISTS()`.
+- `JOIN`s are allowed but can increase dataset complexity and **<u>may</u>** need to be apart of both the outer query and inner `NOT EXISTS()` query. Practicing with `JOIN`s is useful in understanding the limitations and possibilities of `NOT EXISTS()`.
 - `NOT EXISTS()` is allowed in `ON` statements for `JOIN`s. For example, joining the first or last record of one dataset to another dataset.
 
 </br>
@@ -90,11 +90,44 @@ The examples above both transpose multiple rows into a singular column to be agg
 
 </br>
 
+## Concatenating Multiple Strings Within a Single Column (Row Concatenation)
+
+```sql
+SELECT 
+  SampleUserNumber, 
+  STUFF((SELECT N' ' + SampleTextLine FROM #SampleTable
+       WHERE SampleUserNumber = t.SampleUserNumber
+       ORDER BY SampleLineNumber
+       FOR XML PATH, TYPE).value(N'.[1]',N'nvarchar(max)'),1,1,'')
+FROM #SampleTable AS t
+GROUP BY SampleUserNumber
+ORDER BY SampleUserNumber
+```
+
+To insert a separator between each concatenation you can specify a one in the `N' '` of `SELECT N' ' + SampleTextLine`. The default is a empty space.
+
+**Examples:**  
+
+`SELECT N'/' + SampleTextLine` results in `user1/user2/user3`.
+
+`SELECT N',' + SampleTextLine` results in `user1,user2,user3`.
+
+Essentially, the subquery creates a temporary dataset with a singular column where every value is appended with a **given separator** and ordered by a ***stated order***. The `XML PATH` loops through the modified and ordered column values top-down while concatenating (stuffing) each value into a **singular string** stored in  `STUFF()`. The `.value()` function modifies the singular string returned by `STUFF()` and removes the first character which is a separator.
+
+### Tips
+
+- Supported on all SQL Server versions. For ***SQL Server 2017*** and above use `STRING_AGG()` instead.
+- T-SQL requires`.value()` to be **<u>lowercase</u>**, Otherwise an error is thrown.
+- `.value()` is **<u>not</u>** the same as `VALUES()`.
+- For distinct value concatenation, add a `GROUP BY` within the subquery or create an nested subquery to prepare data.
+
+</br>
+
 ## SQL Server Version Differences
 
 ### SQL Server 2022
 
-- `Greatest()` and `Least()`
+- `GREATEST()` and `LEAST()`
 - `STIRNG_SPLIT()` - **Ordinal** is now deterministic.
 - `GENERATE_SERIES()` - Create a table with a series (1-nth number).
 - `IGNORE NULLS` - `FIRST_VALUE()`, `LAST_VALUE()`, `LAG()`, and `LEAD()`.
