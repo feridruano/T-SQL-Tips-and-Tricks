@@ -112,13 +112,13 @@ To insert a separator between each concatenation you can specify a one in the `N
 
 `SELECT N',' + SampleTextLine` results in `user1,user2,user3`.
 
-Essentially, the subquery creates a temporary dataset with a singular column where every value is appended with a **given separator** and ordered by a ***stated order***. The `XML PATH` loops through the modified and ordered column values top-down while concatenating (stuffing) each value into a **singular string** stored in  `STUFF()`. The `.value()` function modifies the singular string returned by `STUFF()` and removes the first character which is a separator.
+Essentially, the subquery creates a temporary dataset with a singular column where every value is appended with a **given separator** and ordered by a ***stated order***. The `XML PATH` loops through the modified and ordered column values top-down while concatenating (stuffing) each value into a **singular string** stored in  `STUFF()`. The `.value()` function modifies the string returned by `STUFF()` and removes the first character which is a separator resulting in the final string.
 
 ### Tips
 
 - Supported on all SQL Server versions. For ***SQL Server 2017*** and above use `STRING_AGG()` instead.
 - T-SQL requires`.value()` to be **<u>lowercase</u>**, Otherwise an error is thrown.
-- `.value()` is **<u>not</u>** the same as `VALUES()`.
+- `.value()` is **<u>not</u>** the same as `VALUES`.
 - For distinct value concatenation, add a `GROUP BY` within the subquery or create an nested subquery to prepare data.
 
 </br>
