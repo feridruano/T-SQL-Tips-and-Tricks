@@ -35,9 +35,8 @@ WHERE RunningTotal >= 10000000 -- Outer Query Predicate - Requires SAME Dataset 
                    AND T.RunningTotal >= 10000000) -- Inner Query Predicate
 ```
 
-#### How It Works
-
 - At the moment, I need a better lyman's explanation of how `NOT EXISTS()` is used here because I forget how it works trying to figure it out each time.
+- Only the record with the earliest `OrderDate` passes the `NOT EXISTS()`.
 
 ### Tips
 
@@ -112,7 +111,9 @@ To insert a separator between each concatenation you can specify a one in the `N
 
 `SELECT N',' + SampleTextLine` results in `user1,user2,user3`.
 
-Essentially, the subquery creates a temporary dataset with a singular column where every value is appended with a **given separator** and ordered by a ***stated order***. The `XML PATH` loops through the modified and ordered column values top-down while concatenating (stuffing) each value into a **singular string** stored in  `STUFF()`. The `.value()` function modifies the string returned by `STUFF()` and removes the first character which is a separator resulting in the final string.
+Essentially, the subquery creates a temporary dataset with a singular column where every value is appended with a ***given separator*** and ordered by a ***stated order***. The `XML PATH` loops through the modified and ordered column values top-down while concatenating each value into an **XML String**. The `.value()` converts the **XML String** to an **NVARCHAR(MAX) String**. Finally, `STUFF()` removes the first character which is a separator.
+
+**Link:** [StackExchange](https://dba.stackexchange.com/questions/207371/please-explain-what-does-for-xml-path-type-value-nvarcharmax)
 
 ### Tips
 
